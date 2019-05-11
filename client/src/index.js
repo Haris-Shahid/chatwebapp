@@ -9,11 +9,13 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
 import AllRoutes from './routers';
+import logger from 'redux-logger';
 
 const Store = createStore(RootReducer,
     {},
     applyMiddleware(
         thunk,
+        logger
     )
 );
 ReactDOM.render(

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
 import { Paper, FormControl, InputLabel, Input, CircularProgress } from '@material-ui/core';
-import { connect } from "react-redux"
 import './style.css';
 
+import { connect } from "react-redux"
 import AuthAction from '../../store/actions/authAction';
 
 class Signup extends Component {
@@ -37,9 +37,17 @@ class Signup extends Component {
                                     confirmPassword !== password ? "Your password doesn't match" : null}`
         if (validation === null || validation === "null") {
             this.setState({ error: null })
-            this.props.signUp(this.state)
+            this.props.signUp(this.state, this.props.history)
         } else {
             this.setState({ error: validation })
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.error) {
+            this.setState({
+                error: nextProps.error
+            })
         }
     }
 
@@ -61,7 +69,7 @@ class Signup extends Component {
                                 <InputLabel htmlFor="password">Password</InputLabel>
                                 <Input id="password" className='input-field' type='password' value={this.state.password} onChange={(e) => this.handleChange('password', e)} />
                             </FormControl>
-                            <FormControl>
+                            <FormControl className='input-container' >
                                 <InputLabel htmlFor="confirmPassword">Confirm Password</InputLabel>
                                 <Input id="confirmPassword" className='input-field' type='password' value={this.state.confirmPassword} onChange={(e) => this.handleChange('confirmPassword', e)} />
                             </FormControl>
@@ -79,12 +87,13 @@ class Signup extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        loading: state.AuthReducer.loading
+        loading: state.AuthReducer.loading,
+        error: state.AuthReducer.error,
     };
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        signUp: state => dispatch(AuthAction.signUp(state)),
+        signUp: (state, nav) => dispatch(AuthAction.signUp(state, nav)),
     }
 }
 
