@@ -1,0 +1,15 @@
+
+.list-group-scroll{
+    overflow: scroll
+}
+
+.siblingContainer{
+    display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+.sibling-child{
+    width: 40%;
+}

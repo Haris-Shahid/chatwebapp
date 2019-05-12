@@ -1,5 +1,6 @@
 import { LOADING_START, GOT_ERROR, USER_REGISTERED, USER_LOG_IN } from '../actionTypes';
 import axios from 'axios';
+import jwt_decode from 'jwt-decode';
 
 export default class AuthAction {
 
@@ -36,7 +37,7 @@ export default class AuthAction {
 
         }
     }
-    static logIn(user) {
+    static logIn(user, nav) {
         return dispatch => {
             dispatch({
                 type: LOADING_START
@@ -53,11 +54,14 @@ export default class AuthAction {
                             error: res.data.error
                         })
                     } else {
-                        console.log(res.data)
-                        // dispatch({
-                        //     type: USER_LOG_IN,
-                        //     user: res.data.user
-                        // })
+                        localStorage.setItem('usertoken', res.data)
+                        let decode = jwt_decode(res.data);
+                        console.log(decode)
+                        dispatch({
+                            type: USER_LOG_IN,
+                            decode
+                        })
+                        nav.push('/profile')
                     }
                 })
                 .catch(err => {

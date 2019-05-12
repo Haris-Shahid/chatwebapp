@@ -1,4 +1,4 @@
-import { LOADING_START, GOT_ERROR, USER_REGISTERED } from '../actionTypes';
+import { LOADING_START, GOT_ERROR, USER_REGISTERED, USER_LOG_IN } from '../actionTypes';
 
 const initialState = {
     username: '',
@@ -13,6 +13,8 @@ export default function AuthReducer(state = initialState, action) {
             return { ...state, loading: true, error: null }
         case USER_REGISTERED:
             return { ...state, ...action.user, loading: false, error: null }
+        case USER_LOG_IN:
+            return { ...state, ...action.decode, loading: false, error: null }
         case GOT_ERROR:
             return { ...state, error: action.error, loading: false }
         default:
