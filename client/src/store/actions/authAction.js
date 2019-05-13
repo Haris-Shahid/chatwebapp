@@ -1,8 +1,19 @@
-import { LOADING_START, GOT_ERROR, USER_REGISTERED, USER_LOG_IN } from '../actionTypes';
+import { LOADING_START, GOT_ERROR, USER_REGISTERED, USER_LOG_IN, ADD_SOCKET, GET_MESSAGES, GET_USERS } from '../actionTypes';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
+import socketIOClient from "socket.io-client";
 
 export default class AuthAction {
+
+    static connectSocket() {
+        return dispatch => {
+            const socket = socketIOClient('http://localhost:5000');
+            dispatch({
+                type: ADD_SOCKET,
+                socket
+            })
+        }
+    }
 
     static signUp(user, nav) {
         return dispatch => {
@@ -37,7 +48,7 @@ export default class AuthAction {
 
         }
     }
-    static logIn(user, nav) {
+    static logIn(user, nav, socket) {
         return dispatch => {
             dispatch({
                 type: LOADING_START
@@ -56,7 +67,21 @@ export default class AuthAction {
                     } else {
                         localStorage.setItem('usertoken', res.data)
                         let decode = jwt_decode(res.data);
-                        console.log(decode)
+                      
+                        socket.on('all_Users', users => {
+                            console.log(users, '///////////////')
+                            dispatch({
+                                type: GET_USERS,
+                                allUsers: users
+                            })
+                        })
+                        socket.on('all_chats', chats => {
+                            console.log(chats, '///////////////')
+                            dispatch({
+                                type: GET_MESSAGES,
+                                messages: chats
+                            })
+                        })
                         dispatch({
                             type: USER_LOG_IN,
                             decode

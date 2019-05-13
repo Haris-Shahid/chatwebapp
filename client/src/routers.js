@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route, NavLink, Redirect } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 
+import { connect } from 'react-redux';
+import AuthAction from './store/actions/authAction';
 import Signup from './container/authScreen/signup';
 import Login from './container/authScreen/login';
 import Profile from './container/profile'
@@ -11,6 +13,14 @@ import Chat from './container/chat';
 import Navbar from './component/navbar/index';
 
 class AllRoutes extends Component {
+
+    constructor(props) {
+        super(props);
+    }
+    
+    componentWillMount(){
+        this.props.connectSocket()
+    }
 
     render() {
         return (
@@ -28,4 +38,10 @@ class AllRoutes extends Component {
     }
 }
 
-export default AllRoutes;
+const mapDispatchToProps = dispatch => {
+    return {
+        connectSocket: () => dispatch(AuthAction.connectSocket())
+    }
+}
+
+export default connect(null, mapDispatchToProps)(AllRoutes);

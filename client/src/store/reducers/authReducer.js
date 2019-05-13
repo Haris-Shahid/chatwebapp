@@ -1,10 +1,12 @@
-import { LOADING_START, GOT_ERROR, USER_REGISTERED, USER_LOG_IN } from '../actionTypes';
+import { LOADING_START, GOT_ERROR, USER_REGISTERED, USER_LOG_IN, ADD_SOCKET } from '../actionTypes';
 
 const initialState = {
     username: '',
     email: '',
+    _id: '',
     error: null,
-    loading: false
+    loading: false,
+    socket: null,
 }
 
 export default function AuthReducer(state = initialState, action) {
@@ -17,6 +19,8 @@ export default function AuthReducer(state = initialState, action) {
             return { ...state, ...action.decode, loading: false, error: null }
         case GOT_ERROR:
             return { ...state, error: action.error, loading: false }
+        case ADD_SOCKET:
+            return { ...state, socket: action.socket }
         default:
             return state;
     }

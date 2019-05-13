@@ -3,8 +3,14 @@ var app = express();
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var mongoose = require('mongoose');
+var http = require('http');
+var server = http.createServer(app);
+var io = require('socket.io')(server);
+var ChatMessage = require('./models/chat');
+var ChatController = require('./controller/chatController');
+var AuthUser = require('./models/auth');
 
-var routes = require('./routes/auth');
+var routes = require('./routes/routes');
 
 mongoose.connect('mongodb://imageUpload:imageUpload1@ds151596.mlab.com:51596/image_database', { useNewUrlParser: true });
 
@@ -13,6 +19,26 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }))
 
 routes(app);
+var interval;
+io.on('connection', socket => {
+    console.log('user connected')
+    if (interval) {
+        clearInterval(interval);
+    }
+    interval = setInterval(() => {
+        ChatController.getUserList(socket)
+        ChatController.getChatList(socket)
+    }, 5000);
+
+    socket.on('message_send', (chat) => {
+        ChatMessage.create(chat).then(() => {
+            ChatMessage.find({}, (e, updateChat) => {
+                socket.emit('all_chats', updateChat)
+            })
+        }).catch(e => console.log(e))
+    })
+
+})
 
 mongoose.connection.once('open', () => console.log('database connected'))
-app.listen(5000, () => console.log('server started on port 5000'))
+server.listen(5000, () => console.log('server started on port 5000'))

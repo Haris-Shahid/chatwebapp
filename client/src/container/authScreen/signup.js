@@ -20,9 +20,20 @@ class Signup extends Component {
     }
 
     handleChange(v, e) {
-        this.setState({
-            [v]: e.target.value
-        })
+        if (v === 'username') {
+            let regrex = /^(?:\w+\W+){0,2}(?:\w+)$/;
+            if ( e.target.value.match(regrex) !== null  ){
+                this.setState({ [v]: e.target.value })
+            }else{
+                if(e.target.value.length === 0){
+                    this.setState({ [v]: '' })
+                }
+            }
+        } else {
+            this.setState({
+                [v]: e.target.value
+            })
+        }
     }
 
     handleSubmit() {

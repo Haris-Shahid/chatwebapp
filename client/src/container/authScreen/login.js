@@ -34,7 +34,7 @@ class Login extends Component {
                     !password ? 'Please enter password' : null}`
         if (validation === null || validation === "null") {
             this.setState({ error: null })
-            this.props.logIn(this.state, this.props.history)
+            this.props.logIn(this.state, this.props.history, this.props.socket)
         } else {
             this.setState({ error: validation })
         }
@@ -85,11 +85,12 @@ const mapStateToProps = (state) => {
     return {
         loading: state.AuthReducer.loading,
         error: state.AuthReducer.error,
+        socket: state.AuthReducer.socket,
     };
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        logIn: (state, nav) => dispatch(AuthAction.logIn(state, nav)),
+        logIn: (state, nav, socket) => dispatch(AuthAction.logIn(state, nav, socket)),
     }
 }
 

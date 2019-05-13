@@ -25,10 +25,10 @@ class Profile extends Component {
     render() {
         return (
             <div className="row main-container" style={{ height: window.innerHeight - 20 }} >
-                <div className='col-md-2' >
+                <div className='col-md-2 user-list-cont' >
                     <UserList />
                 </div>
-                <div className='col-md-10' >
+                <div className='col-md-10 section' >
                     <div className='siblingContainer' >
                         <div className='sibling-child' >
                             <div className='row' >
