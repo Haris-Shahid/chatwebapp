@@ -7,7 +7,7 @@ export default class AuthAction {
 
     static connectSocket() {
         return dispatch => {
-            const socket = socketIOClient('http://localhost:5000');
+            const socket = socketIOClient('https://patienttracking.herokuapp.com');
             dispatch({
                 type: ADD_SOCKET,
                 socket
@@ -65,28 +65,30 @@ export default class AuthAction {
                             error: res.data.error
                         })
                     } else {
-                        localStorage.setItem('usertoken', res.data)
-                        let decode = jwt_decode(res.data);
-                      
-                        socket.on('all_Users', users => {
-                            console.log(users, '///////////////')
-                            dispatch({
-                                type: GET_USERS,
-                                allUsers: users
+                        console.log(res.data , '////////////')
+                        if(res.data.payload){
+                            // localStorage.setItem('usertoken', res.data)
+                            // let decode = jwt_decode(res.data, { header: true });
+                            socket.on('all_Users', users => {
+                                console.log(users, '///////////////')
+                                dispatch({
+                                    type: GET_USERS,
+                                    allUsers: users
+                                })
                             })
-                        })
-                        socket.on('all_chats', chats => {
-                            console.log(chats, '///////////////')
-                            dispatch({
-                                type: GET_MESSAGES,
-                                messages: chats
+                            socket.on('all_chats', chats => {
+                                console.log(chats, '///////////////')
+                                dispatch({
+                                    type: GET_MESSAGES,
+                                    messages: chats
+                                })
                             })
-                        })
-                        dispatch({
-                            type: USER_LOG_IN,
-                            decode
-                        })
-                        nav.push('/profile')
+                            dispatch({
+                                type: USER_LOG_IN,
+                                decode: res.data.payload
+                            })
+                            nav.push('/profile')
+                        }
                     }
                 })
                 .catch(err => {

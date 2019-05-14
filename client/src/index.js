@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import registerServiceWorker from './registerServiceWorker';
+// import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 
 import RootReducer from './store/reducers'
@@ -23,4 +23,4 @@ ReactDOM.render(
         <AllRoutes />
     </Provider>
     , document.getElementById('root'));
-registerServiceWorker();
+// registerServiceWorker();

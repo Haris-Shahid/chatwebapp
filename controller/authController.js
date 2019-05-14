@@ -45,7 +45,7 @@ module.exports = {
                             email: user.email,
                         }
                         let token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: 60 * 60 * 24 })
-                        res.send(token);
+                        res.send({ token, payload });
                     } else {
                         res.json({ error: 'You type a wrong password' })
                     }
