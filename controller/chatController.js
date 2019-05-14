@@ -15,6 +15,7 @@ module.exports = {
     },
     getChatList: (socket) => {
         ChatMessage.find({}, (e, chat) => {
+            console.log('all_chats')
             socket.emit('all_chats', chat)
         })
     }

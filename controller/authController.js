@@ -23,7 +23,7 @@ module.exports = {
                             .then(user => {
                                 res.json({ status: 'registered!', user: { username: user.username, email: user.email } })
                             }).catch(e => {
-                                res.send('error: ' + e)
+                                res.json({ error: e })
                             })
                     })
                 } else {
@@ -44,8 +44,8 @@ module.exports = {
                             username: user.username,
                             email: user.email,
                         }
-                        // let token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: 60 * 60 * 24 })
-                        res.send({ payload });
+                        let token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: 60 * 60 * 24 })
+                        res.json({ token });
                     } else {
                         res.json({ error: 'You type a wrong password' })
                     }
@@ -54,7 +54,7 @@ module.exports = {
                 }
             })
             .catch(e => {
-                res.send('error: ' + e)
+                res.json({ error: e })
             })
     },
     AuthUserProfile: (req, res) => {
@@ -65,8 +65,8 @@ module.exports = {
             if (user) {
                 res.json(user)
             } else {
-                res.send("User does not exist")
+                res.json({ error: "User does not exist" })
             }
-        }).catch(e => res.send('error: ' + e))
+        }).catch(e => res.json({ error: e }) )
     }
 }

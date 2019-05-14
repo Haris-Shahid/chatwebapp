@@ -20,25 +20,28 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
 routes(app);
-var interval;
-io.on('connection', socket => {
-    console.log('user connected')
-    if (interval) {
-        clearInterval(interval);
-    }
-    interval = setInterval(() => {
-        ChatController.getUserList(socket)
-        ChatController.getChatList(socket)
-    }, 5000);
+var usersConnected = []
 
-    socket.on('message_send', (chat) => {
-        ChatMessage.create(chat).then(() => {
-            ChatMessage.find({}, (e, updateChat) => {
-                socket.emit('all_chats', updateChat)
-            })
-        }).catch(e => console.log(e))
+io.on('connection', socket => {
+    usersConnected.push(socket);
+    console.log('user connected')
+
+    socket.on('newRegistration', (user) => {
+        io.emit('newRegisterUserAdded', user)
     })
 
+    socket.on('getUsersAndChats', () => {
+        ChatController.getChatList(io)
+        ChatController.getUserList(io)
+    })
+
+    socket.on('message_send', (chat) => {
+        ChatMessage.create(chat).then((chat) => {
+            ChatController.getChatList(io)
+        }).catch(e => console.log(e))
+    })
+    socket.on('disconnect', function () {
+    });
 })
 
 mongoose.connection.once('open', () => console.log('database connected'))
