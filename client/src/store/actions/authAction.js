@@ -66,7 +66,7 @@ export default class AuthAction {
                         })
                     } else {
                         console.log(res.data , '////////////')
-                        if(res.data.payload){
+                        // if(res.data.payload){
                             // localStorage.setItem('usertoken', res.data)
                             // let decode = jwt_decode(res.data, { header: true });
                             socket.on('all_Users', users => {
@@ -88,7 +88,7 @@ export default class AuthAction {
                                 decode: res.data.payload
                             })
                             nav.push('/profile')
-                        }
+                        // }
                     }
                 })
                 .catch(err => {

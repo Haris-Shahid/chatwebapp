@@ -16,6 +16,7 @@ export default function AuthReducer(state = initialState, action) {
         case USER_REGISTERED:
             return { ...state, ...action.user, loading: false, error: null }
         case USER_LOG_IN:
+        console.log(action.decode)
             return { ...state, ...action.decode, loading: false, error: null }
         case GOT_ERROR:
             return { ...state, error: action.error, loading: false }
