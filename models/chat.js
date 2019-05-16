@@ -4,8 +4,11 @@ var Schema = mongoose.Schema
 var ChatSchema = new Schema({
     senderId: String,
     receiverId: String,
-    message: String,
-    createdAt: { 
+    chat: {
+        message: String,
+        image: String
+    },
+    createdAt: {
         type: Date,
         default: Date.now()
     }
